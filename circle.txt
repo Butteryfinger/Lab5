@@ -1,0 +1,8 @@
+graph Circular {
+      a -- b;
+      b -- c;
+      c -- d;
+      e -- d;
+      e -- a;
+      a -- e;
+}
