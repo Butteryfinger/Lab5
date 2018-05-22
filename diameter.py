@@ -1,6 +1,8 @@
 from graf import Graf
 #import matplotlib.pyplot as plt
 
+# Ändrar om för privata variable, class metod
+
 def dia():
     p = 1
     meter = []
