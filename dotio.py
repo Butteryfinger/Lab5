@@ -1,14 +1,14 @@
 import sys
 
+# Fel sökning, tom lista och första raden
+
 f = sys.stdin
 
-# Make this read from stdin, also error check here and there
 def read_dot():
     Vert = []
     Edges = []
     a = f.readline()
     a = f.readline()
-    a.replace
     while a != "}\n":
         a = a.replace(";","")
         cur = a.split()
@@ -20,13 +20,11 @@ def read_dot():
              Vert.append(cur[0])
         if cur[2] not in Vert:
              Vert.append(cur[2])
-        if (cur[0], cur[2]) not in Edges:
-            if (cur[2], cur[0]) not in Edges:
-                Edges.append((cur[0], cur[2]))
-        else:
-            Edges.append((cur[0], cur[2]))
+        if (cur[0], cur[2]) not in Edges and (cur[2], cur[0]) not in Edges:
+             Edges.append((cur[0], cur[2]))
         a = f.readline()
     print(Vert)
     print(Edges)
 
 read_dot()
+
