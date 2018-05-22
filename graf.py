@@ -1,7 +1,7 @@
 #Tuple implement with dict()
 import random
 
-
+# Ändrar om för privata variable, class metod
 
 class Graf:
 
@@ -10,11 +10,7 @@ class Graf:
         self.dummy = dict()
 
     # Tuple input such as (A, B)
-    # Kanske har det som A, B så inmatningen ser bättre ut
-    def insert_pair(self, con): # O(3)
-        if len(con) > 2:
-            raise IndexError
-        a, b = con
+    def insert_pair(self, a, b): # O(3)
         if a in self.graph:
             if b in self.graph[a]:
                 print("Edge already existing")
@@ -22,7 +18,6 @@ class Graf:
             self.graph[a].append(b)
         else:
             self.graph[a] = [b]
-        # Kanske onödigt
         if b in self.graph:
             if a in self.graph[a]:
                 print("Edge already existing")
@@ -30,7 +25,6 @@ class Graf:
             self.graph[b].append(a)
         else:
             self.graph[b] = [a]
-
 
     def remove(self, con): # O(3)
         if len(con) > 2:
@@ -80,7 +74,9 @@ class Graf:
 
 
 
-    # O(V + E) 
+    # O(V + E) kollar alla koppling som sen kollas efter deras kopplingar
+    # Ser en lite ineffektivitet vid E då den kollar kopplingen från
+    # föregående Node, Lägger till en extra koppling koll
     def distance(self, start):
         self.dummy = dict()
         if self.graph[start] == []:
@@ -105,8 +101,8 @@ class Graf:
             self._dist(valid, count+1, visited)
                 
 
-    def __setitem__(self, inp):
-        self.insert_pair(inp)
+    def __setitem__(self, vert, end):
+        self.insert_pair(vert, end)
 
     def __getitem__(self, inp):
         return self.vertex(inp)
@@ -115,17 +111,25 @@ class Graf:
 if __name__ == "__main__":
     ahoy = Graf()
     # ahoy.random(5, 0.5)
-    ahoy.insert_pair(("A", "B"))
-    ahoy.insert_pair(("C", "B"))
-    ahoy.insert_pair(("E", "B"))
+    ahoy.insert_pair("A", "B")
+    ahoy.insert_pair("C", "B")
+    ahoy.insert_pair("E", "B")
+    ahoy.insert_pair("A", "E")
+    ahoy["C"] = "E"
+    ahoy["B"] = "A" # Error check
     print(ahoy["E"])
+    ahoy.check_all()
+    print("")
     ahoy.remove(("B", "E"))
     ahoy.check_all()
 
 
+
     # Random func test
 
-    ahoy.random(10, 0.3)
+    print("random test")
+
+    ahoy.random(10, 0.5)
     ahoy.check_all()
     print("")
     ahoy.distance(1)
@@ -133,5 +137,3 @@ if __name__ == "__main__":
     print(len(ahoy.dummy))
     for e in ahoy.dummy:
         print(e)
-
-
