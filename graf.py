@@ -1,108 +1,115 @@
 #Tuple implement with dict()
 import random
 
-# Ändrar om för privata variable, class metod
+# Class Method and private variable
+# Done
 
 class Graf:
 
     def __init__(self):
-        self.graph = dict()
-        self.dummy = dict()
+        self.__graph = dict()
+        self.__dummy = dict()
 
     # Tuple input such as (A, B)
-    def insert_pair(self, a, b): # O(3)
-        if a in self.graph:
-            if b in self.graph[a]:
+    # Kanske har det som A, B så inmatningen ser bättre ut
+    def insert_pair(self, a, b): # O(2)
+        if a in self.__graph:
+            if b in self.__graph[a]:
                 print("Edge already existing")
                 return
-            self.graph[a].append(b)
+            self.__graph[a].append(b)
         else:
-            self.graph[a] = [b]
-        if b in self.graph:
-            if a in self.graph[a]:
+            self.__graph[a] = [b]
+        # Kanske onödigt
+        if b in self.__graph:
+            if a in self.__graph[a]:
                 print("Edge already existing")
                 return
-            self.graph[b].append(a)
+            self.__graph[b].append(a)
         else:
-            self.graph[b] = [a]
+            self.__graph[b] = [a]
+
 
     def remove(self, con): # O(3)
         if len(con) > 2:
             raise IndexError
         a, b = con
-        if a in self.graph:
-            if b in self.graph[a]:
-                if [b] == self.graph[a]:
-                    del self.graph[a]
+        if a in self.__graph:
+            if b in self.__graph[a]:
+                if [b] == self.__graph[a]:
+                    del self.__graph[a]
                 else:
-                    self.graph[a].remove(b)
+                    self.__graph[a].remove(b)
         # Kanske onödigt
-        if b in self.graph:
-            if a in self.graph[b]:
-                if [a] == self.graph[b]:
-                    del self.graph[b]
+        if b in self.__graph:
+            if a in self.__graph[b]:
+                if [a] == self.__graph[b]:
+                    del self.__graph[b]
                 else:
-                    self.graph[b].remove(a)
+                    self.__graph[b].remove(a)
 
 
     def clear(self):
-        self.graph = dict()
+        self.__graph = dict()
 
+    def Dagraph(self):
+        return self.__graph
 
     def vertex(self, v):
-        return self.graph[v]
+        return self.__graph[v]
 
     def sort_edges(self):
-        for a in self.graph:
-            self.graph[a].sort()
+        for a in self.__graph:
+            self.__graph[a].sort()
 
     def check_all(self): 
-        for a in self.graph:
-            print(a, self.graph[a])
+        for a in self.__graph:
+            print(a, self.__graph[a])
 
     # Dess komplexit kommer från att den skapa en koppling mellan alla vert
-    def random(self, n, p): # O(n(1-n)/2)
-        self.clear()
+    # SÅ UNDERLIGT!
+    @classmethod
+    def random(cls, n, p): # O(n(1-n)/2)
+        NEW = cls()
         Vert = list(range(1,n+1))
         for alt in Vert:
-            self.graph[alt] = []
+           NEW.__graph[alt] = []
         for e in Vert :
             for t in range(e+1, n+1):
                 if p >= random.random():
-                    self.graph[e].append(t)
-                    self.graph[t].append(e)
+                    NEW.__graph[e].append(t)
+                    NEW.__graph[t].append(e)
+        return NEW
 
 
-
-    # O(V + E) kollar alla koppling som sen kollas efter deras kopplingar
-    # Ser en lite ineffektivitet vid E då den kollar kopplingen från
-    # föregående Node, Lägger till en extra koppling koll
+    # O(V + E)  returnerar en dict() med avståndet till noder som 1 : [1,2,5]
     def distance(self, start):
-        self.dummy = dict()
-        if self.graph[start] == []:
+        self.__dummy = dict()
+        if self.__graph[start] == []:
             print("invalid start")
             return
-        self.dummy[1] = self.graph[start]
-        self._dist(self.graph[start], 2, list(set([start]).union(self.graph[start])))
+        self.__dummy[1] = self.__graph[start]
+        self._dist(self.__graph[start], 2, list(set([start]).union(self.__graph[start])))
+        return self.__dummy
 
 
     def _dist(self, connected, count, visited):
         valid = []
         # samla alla kopplade kanter
         for e in connected:
-            valid = list(set(self.graph[e]).union(valid))
+            valid = list(set(self.__graph[e]).union(valid))
         # tar bort gamla kanter
         valid = list(set(valid)-set(visited))
         if valid == []:
             return
         else:
             visited = list(set(valid).union(visited))
-            self.dummy[count] = valid
+            self.__dummy[count] = valid
             self._dist(valid, count+1, visited)
                 
 
-    def __setitem__(self, vert, end):
-        self.insert_pair(vert, end)
+    def __setitem__(self, inp, val):
+        self.insert_pair(inp, val)
 
     def __getitem__(self, inp):
         return self.vertex(inp)
@@ -114,26 +121,19 @@ if __name__ == "__main__":
     ahoy.insert_pair("A", "B")
     ahoy.insert_pair("C", "B")
     ahoy.insert_pair("E", "B")
-    ahoy.insert_pair("A", "E")
-    ahoy["C"] = "E"
-    ahoy["B"] = "A" # Error check
+    ahoy["A"] = "E"
     print(ahoy["E"])
-    ahoy.check_all()
-    print("")
     ahoy.remove(("B", "E"))
     ahoy.check_all()
 
 
-
     # Random func test
+    
 
-    print("random test")
+    Rand = Graf.random(10, 0.3)
+    print(type(Rand))
+    print(Rand.check_all(), "WELP")
+    print(len(Rand.distance(1)))
 
-    ahoy.random(10, 0.5)
-    ahoy.check_all()
-    print("")
-    ahoy.distance(1)
-    print(ahoy.dummy)
-    print(len(ahoy.dummy))
-    for e in ahoy.dummy:
-        print(e)
+
+
