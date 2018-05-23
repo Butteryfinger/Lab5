@@ -1,20 +1,19 @@
 from graf import Graf
 #import matplotlib.pyplot as plt
 
-# Ändrar om för privata variable, class metod
+# Ändrad för ändringar i graf.py
 
 def dia():
     p = 1
     meter = []
     point = []
-    grp = Graf()
     while not p/10 >= 1:	# Bug med float tal addition, speciellt med 0.1 + 0.1 + 0.1
-        grp.random(100, p/10)
+        grp = Graf.random(100, p/10)
         old_vert = 0
-        for vert in grp.graph:
-            grp.distance(vert)
-            if len(grp.dummy) > old_vert:
-                old_vert = len(grp.dummy)
+        for vert in grp.Dagraph():
+            cur = grp.distance(vert)
+            if len(cur) > old_vert:
+                old_vert = len(cur)
         meter.append(old_vert)
         point.append(p/10)
         p += 1 
