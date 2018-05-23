@@ -1,13 +1,11 @@
 import sys
 
-# Fel sökning, tom lista och första raden
-
-f = sys.stdin
-
-def read_dot():
+def read_dot(f):
     Vert = []
     Edges = []
     a = f.readline()
+    if "{" not in a or a == []:
+        raise IndexError("Wrong Input form, unexact form")
     a = f.readline()
     while a != "}\n":
         a = a.replace(";","")
@@ -20,11 +18,17 @@ def read_dot():
              Vert.append(cur[0])
         if cur[2] not in Vert:
              Vert.append(cur[2])
-        if (cur[0], cur[2]) not in Edges and (cur[2], cur[0]) not in Edges:
-             Edges.append((cur[0], cur[2]))
+        if (cur[0], cur[2]) not in Edges:
+            if (cur[2], cur[0]) not in Edges:
+                Edges.append((cur[0], cur[2]))
+        else:
+            Edges.append((cur[0], cur[2]))
         a = f.readline()
-    print(Vert)
-    print(Edges)
+    DOT = Graf()
+    for e in Edges:
+        a, b = e
+        DOT.insert_pair(a,b)
+    for t in DOT.Dagraph():
+        print(t, ";" ,DOT.vertex(t))
 
-read_dot()
-
+read_dot(sys.stdin)
