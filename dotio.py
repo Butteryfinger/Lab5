@@ -1,5 +1,7 @@
 import sys
+from graf import Graf
 
+# Nu med graf i form av graf.py
 def read_dot(f):
     Vert = []
     Edges = []
