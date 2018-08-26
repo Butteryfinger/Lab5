@@ -34,3 +34,8 @@ def read_dot(f):
         print(t, ";" ,DOT.vertex(t))
 
 read_dot(sys.stdin)
+
+# Input exempel: python3 dotio.py < circle.txt
+# Bra exemplar circle, test ger fungerande svar
+# testerr ger error unexact form
+# testerr2 ger error too many elements

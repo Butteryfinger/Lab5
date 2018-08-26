@@ -2,7 +2,7 @@
 import random
 
 # Class Method and private variable
-# Done
+# diameter fix
 
 class Graf:
 
@@ -67,7 +67,6 @@ class Graf:
             print(a, self.__graph[a])
 
     # Dess komplexit kommer från att den skapa en koppling mellan alla vert
-    # SÅ UNDERLIGT!
     @classmethod
     def random(cls, n, p): # O(n(1-n)/2)
         NEW = cls()
@@ -86,8 +85,7 @@ class Graf:
     def distance(self, start):
         self.__dummy = dict()
         if self.__graph[start] == []:
-            print("invalid start")
-            return
+            return self.__dummy
         self.__dummy[1] = self.__graph[start]
         self._dist(self.__graph[start], 2, list(set([start]).union(self.__graph[start])))
         return self.__dummy
@@ -101,6 +99,8 @@ class Graf:
         # tar bort gamla kanter
         valid = list(set(valid)-set(visited))
         if valid == []:
+            if len(visited) < len(self.__graph): # Ser om antalet besök är färre än antalet vertex. dvs disconnected
+                self.__dummy = dict()
             return
         else:
             visited = list(set(valid).union(visited))
@@ -130,10 +130,9 @@ if __name__ == "__main__":
     # Random func test
     
 
-    Rand = Graf.random(10, 0.3)
+    Rand = Graf.random(100, 0.1)
     print(type(Rand))
-    print(Rand.check_all(), "WELP")
+    print(Rand.check_all(), "All")
     print(len(Rand.distance(1)))
-
 
 
